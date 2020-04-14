@@ -1,7 +1,7 @@
 {
 	"name": "insomnia-plugin-random-nif",
 	"description": "Insomnia plugin for random valid portuguese NIFs",
-	"version": "1.0.0",
+	"version": "1.1.2",
 	"main": "index.js",
 	"license": "MIT",
 	"author": "Vinicius Seixas",
@@ -10,8 +10,8 @@
 		"description": "Generates a random valid portuguese NIF"
 	},
 	"repository": "https://github.com/vipseixas/insomnia-plugin-random-nif",
-	"dependencies": [],
-	"devDependencies": [],
+	"dependencies": {},
+	"devDependencies": {},
 	"keywords": [
 		"insomnia",
 		"plugin",

@@ -22,13 +22,56 @@ const generateNIF = () => {
 	return baseNumber + cd.toString();
 };
 
+const responseCacheHook = context => {
+	const requestId = context.response.getRequestId();
+	context.store.removeItem(requestId);
+};
+
+const run = async (context, CacheType) => {
+	// No cache, just return the new value
+	if (!CacheType || CacheType == 'none')
+		return generateNIF();
+
+	// For now caches are per request only
+	const { requestId } = context.meta;
+
+	const cachedValue = await context.store.getItem(requestId);
+
+	// If no cached value, set one
+	if (cachedValue === null) {
+		const nif = generateNIF();
+		context.store.setItem(requestId, nif);  // Don't need to wait for this
+		return nif;
+	}
+
+	// Return cached value for request
+	return context.store.getItem(requestId);
+};
+
+module.exports.responseHooks = [ responseCacheHook ];
+
 module.exports.templateTags = [
 	{
 		name: "NIFgen",
 		displayName: "Random NIF Generator",
 		description: "Generates a rendom valid portuguese NIF",
-		async run(context) {
-			return generateNIF();
-		}
+		args: [
+			{
+				displayName: "CacheType",
+				type: "enum",
+				defaultValue: "none",
+				options: [
+					{
+						displayName: "None",
+						value: "none"
+					},
+					{
+						displayName: "Request",
+						value: "request"
+					}
+				]
+			}
+		],
+		run
 	}
 ];
